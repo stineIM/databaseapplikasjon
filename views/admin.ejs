@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <nav>
+        <div class="navlinks">
+          <a href="/home">Heim</a>
+          <a href="/logout">Logg ut</a>          
+        </div>
+      </nav>
+    <h2>Admin site</h2>
+    <h3>Users</h3>
+    <table>
+        <tr>
+            <th>Fornavn</th>
+            <th>Etternavn</th>
+            <th>Email</th>
+            <th>Rediger</th>
+            <th>Slett</th>
+        </tr>
+        <% users.forEach((user) => { %>
+        <tr>
+            <td><%= user.firstname %> </td>
+            <td><%= user.lastname %></td>
+            <td><%= user.email %></td>
+            <td><a href="/admin/edit/<%=user.id%>">Edit</a></td>
+            <td>
+                <form action="/admin/delete/<%= user.id %>" method="post" onsubmit="return confirm('Er du sikker på at du vil slette denne brukeren?');">
+                    <button type="submit">Slett</button>
+                </form>
+            </td>
+        </tr>
+        <% }) %>
+        </table>
+</body>
+</html>
