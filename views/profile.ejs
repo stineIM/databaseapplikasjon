@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <nav>
+        <div class="navlinks">
+          <a href="/home">Heim</a>
+          <a href="/logout">Logg ut</a>          
+        </div>
+      </nav>
+    <h2>Profile site</h2>
+    <h3>Users</h3>
+   
+        <div>
+            <h3>Profile</h3>
+            <p>Firstname: <%= user.firstname %></p>
+            <p>Lastname: <%= user.lastname %></p>
+            <p>Email: <%= user.email %></p>
+            <form action="/profile/delete/<%= user.id %>" method="post" onsubmit="return confirm('Er du sikker på at du vil slette deg som bruker?');">
+                <button type="submit">Slett</button>
+            </form>
+        </div>
+</body>
+</html>

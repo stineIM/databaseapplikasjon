@@ -74,11 +74,13 @@ app.post('/auth', async function (req, res) {
             res.status(200);
             if (checkInDb.role == 1) { // ADMIN SYSTEM
                 req.session.admin = true;
+               
             }
             // If the account exists
             // Authenticate the user
             req.session.loggedin = true;
             req.session.email = email;
+            req.session.userid = checkInDb.id; 
             // Redirect to home page
             res.redirect('/home');
         } else {
@@ -123,6 +125,43 @@ app.get("/logout", async (req, res) => {
     req.session.admin = false; // ADMIN SYSTEM
     res.redirect("/")
 })
+
+// ADMIN SYSTEM
+app.get('/profile', async function (req, res) {
+    if (req.session.loggedin) {
+        const userid = req.session.userid;
+        const db = await dbPromise;
+        let getUserDetails = `SELECT * FROM users WHERE id = '${userid}'`;
+        let user = await db.get(getUserDetails);     
+
+        if (user === undefined) {
+            res.status(400);
+            res.send("Invalid user");
+        } else {
+            res.status(200);
+            res.render('profile', { userid, user });
+        }
+    }
+});
+
+
+// Rute for å håndtere POST-forespørsler til '/admin/delete/:id'.
+app.post('/profile/delete/:id', async (req, res) => {
+    const id = req.params.id;  // Henter ID fra URL-parameteren.
+    const db = await dbPromise; // Venter på at databasetilkoblingen skal være klar.
+    const query = 'DELETE FROM users WHERE id = ?';
+    
+    try {
+        await db.run(query, id); // Utfører sletting av brukeren fra databasen.
+        console.log('Deleted user with ID:', id); // Logger ID-en til brukeren som ble slettet.
+        res.redirect('/');  // Omdirigerer tilbake til admin-siden etter sletting.
+    } catch (error) {
+        console.error('Error when deleting:', error); // Logger eventuelle feil under sletting.
+        res.status(500).send("Unable to delete user.");  // Sender feilmelding hvis sletting feiler.
+    }
+});
+
+
 
 // ADMIN SYSTEM
 app.get('/admin', async function (req, res) {
