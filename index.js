@@ -30,8 +30,13 @@ app.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
-    res.render('login');
+    res.render('index');
 });
+
+
+app.get("/login", async (req, res) => {
+    res.render("login");
+})
 
 app.get("/register", async (req, res) => {
     res.render("register");
@@ -50,7 +55,7 @@ app.post("/register", async (req, res) => {
 
     // Tabellen eg bruker heiter "users" og har kolonnene "firstname", "lastname", "email" og "password"
     await db.run("INSERT INTO users (firstname, lastname, email, password) VALUES (?, ?, ?, ?)", fname, lname, email, passwordHash);
-    res.redirect("/");
+    res.redirect("/login");
 
 })
 
